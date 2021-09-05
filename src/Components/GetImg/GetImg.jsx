@@ -1,51 +1,47 @@
-import React, { Component } from "react";
+import { useState } from "react";
 import { BiSearch } from "react-icons/bi";
 
 import PropTypes from "prop-types";
 
 import s from "./GetImg.module.css";
 
-export default class GetImg extends Component {
-  state = {
-    nameImg: "",
+export default function GetImg({ onSubmit }) {
+  const [nameImg, setNameImg] = useState("");
+
+  const handleNameChangeInput = (event) => {
+    setNameImg(event.currentTarget.value.toLowerCase());
   };
 
-  handleNameChangeInput = (event) => {
-    this.setState({ nameImg: event.currentTarget.value.toLowerCase() });
-  };
-
-  handelSubmitForm = (event) => {
+  const handelSubmitForm = (event) => {
     event.preventDefault();
 
-    if (this.state.nameImg.trim() === "") {
+    if (nameImg.trim() === "") {
       return alert("Введите название картинки!");
     }
 
-    this.props.onSubmit(this.state.nameImg);
-    this.setState({ nameImg: "" });
+    onSubmit(nameImg);
+    setNameImg("");
   };
 
-  render() {
-    return (
-      <div className={s.GetContainer}>
-        <form onSubmit={this.handelSubmitForm}>
-          <button className={s.BtnForm} type="submit">
-            <BiSearch style={{ width: 24, height: 24 }} />
-          </button>
-          <input
-            type="tel"
-            placeholder="Search images..."
-            name="number"
-            value={this.state.nameImg}
-            onChange={this.handleNameChangeInput}
-            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-            title="Наименование изображения может состоять только из букв!!!"
-            // required
-          />
-        </form>
-      </div>
-    );
-  }
+  return (
+    <div className={s.GetContainer}>
+      <form onSubmit={handelSubmitForm}>
+        <button className={s.BtnForm} type="submit">
+          <BiSearch style={{ width: 24, height: 24 }} />
+        </button>
+        <input
+          type="tel"
+          placeholder="Search images..."
+          name="number"
+          value={nameImg}
+          onChange={handleNameChangeInput}
+          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+          title="Наименование изображения может состоять только из букв!!!"
+          // required
+        />
+      </form>
+    </div>
+  );
 }
 
 GetImg.propTypes = {
