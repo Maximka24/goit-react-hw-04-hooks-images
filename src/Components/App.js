@@ -19,12 +19,7 @@ export default function AppHook() {
       return;
     }
 
-    setStatus("load");
-
-    Api.fetchApi({ nameImg, pageImg })
-      .then((img) => setImgList(img))
-      .catch((error) => setError(error))
-      .finally(() => setStatus("resolved"));
+    renderMainGetRequest();
   }, [nameImg]);
 
   useEffect(() => {
@@ -32,14 +27,31 @@ export default function AppHook() {
       return;
     }
 
+    renderAdditionalGetRequest();
+  }, [pageImg]);
+
+  const renderMainGetRequest = () => {
+    setStatus("load");
+
+    const option = { nameImg, pageImg };
+
+    Api.fetchApi(option)
+      .then((img) => setImgList(img))
+      .catch((error) => setError(error))
+      .finally(() => setStatus("resolved"));
+  };
+
+  const renderAdditionalGetRequest = () => {
+    const option = { nameImg, pageImg };
+
     setStatusLoad(true);
 
-    Api.fetchApi({ nameImg, pageImg })
+    Api.fetchApi(option)
       .then((img) => setImgList((prevState) => [...prevState, ...img]))
       .then(scrollToTarget)
       .catch((error) => setError(error))
       .finally(() => setStatusLoad(false));
-  }, [pageImg]);
+  };
 
   const onSubmitNameState = (getNameImg) => {
     setImgList([]);
